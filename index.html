@@ -28,6 +28,10 @@
             document.getElementById("wordTableOutput").value = outValPlain;
             document.getElementById("renderedWordTableOutput").innerHTML = outValBootstrapRender;
         }
+
+        function copyWordTableOutput() {
+            navigator.clipboard.writeText(document.getElementById("wordTableOutput").value);
+        }
     </script>
   </head>
   <body>
@@ -59,10 +63,14 @@
                     <label for="wordTableOutput" class="form-label form-control-lg">Simple HTML Table Source Output</label>
                     <textarea  class="form-control form-control-lg" id="wordTableOutput" rows="4" readonly></textarea>
                 </div>
+                <div class="d-grid gap-2 justify-content-sm-end" >
+                    <button type="button" class="btn btn-primary" onclick="copyWordTableOutput();">Copy to Clipboard</button>
+                </div>
                 <div class="mb-3">
                     <label class="form-label form-control-lg">Rendered Table Output</label>
                     <div id="renderedWordTableOutput" class="fs-5"></div>
                 </div>
+                <hr/>
             </form>
         </div>
     </div>
