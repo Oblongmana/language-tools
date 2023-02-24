@@ -33,14 +33,14 @@
   <body>
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Language Tools</a>
+          <a class="navbar-brand fs-3" href="#">Language Tools</a>
         </div>
       </nav>
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <h3>Word/Tab-Separated Table to html</h5>
-                <p>May help with creating flash cards for Conjugations in Mnemosyne, probably Anki, maybe others. Won't work with cells that span multiple others</p>
+                <h3>Word/Tab-Separated Table to html</h3>
+                <p class="fs-5">May help with creating flash cards for Conjugations in Mnemosyne, probably Anki, maybe others. Won't work with cells that span multiple others. Chunky font sizes for legibility of diacritics</p>
                 <div class="d-grid gap-2 justify-content-sm-end" >
                     <button type="button" class="btn btn-primary" onclick="loadWordTableExample();">Load Example</button>
                 </div>
@@ -49,19 +49,19 @@
         <div class="row">
             <form>
                 <div class="mb-3">
-                    <label for="wordTableInput" class="form-label">Word/Tab-Separated Table Input</label>
-                    <textarea class="form-control" id="wordTableInput" rows="4"></textarea>
+                    <label for="wordTableInput" class="form-label form-control-lg">Word/Tab-Separated Table Input</label>
+                    <textarea class="form-control form-control-lg" id="wordTableInput" rows="4"></textarea>
                 </div>
                 <div class="d-grid gap-2 justify-content-sm-end" >
                     <button type="button" class="btn btn-primary" onclick="convertWordTableInput();">Transform</button>
                 </div>
                 <div class="mb-3">
-                    <label for="wordTableOutput" class="form-label">Simple HTML Table Source Output</label>
-                    <textarea  class="form-control" id="wordTableOutput" rows="4" readonly></textarea>
+                    <label for="wordTableOutput" class="form-label form-control-lg">Simple HTML Table Source Output</label>
+                    <textarea  class="form-control form-control-lg" id="wordTableOutput" rows="4" readonly></textarea>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Rendered Table Output</label>
-                    <div id="renderedWordTableOutput"></div>
+                    <label class="form-label form-control-lg">Rendered Table Output</label>
+                    <div id="renderedWordTableOutput" class="fs-5"></div>
                 </div>
             </form>
         </div>
