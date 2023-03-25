@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Language Tools: Word Macros</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+
+    <script type="text/javascript">
+        const LOCAL_STORAGE_KEY = "jameshill.io-language-tools";
+
+        const ID_MACRO_CODE = "macroCode";
+
+        function copyMacro() {
+            navigator.clipboard.writeText(document.getElementById(ID_MACRO_CODE).innerText);
+        }
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand fs-3" href="index.html">Language Tools: Word Macros</a>
+        </div>
+      </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <h3>Word Macros: ToggleAllSilentCorrectorsAndSquiggles</h3>
+                <p class="fs-5">A macro for toggling all auto-correction type features off/on, as well as grammar/spelling highlighting (which obscure diacritics)</p>
+            </div>
+        </div>
+        <div class="mb-3">
+            <p>
+                TODO: this should really be version-controlled.
+            </p>
+            <p>
+                A few preliminary warnings:
+                <ol>
+                    <li>Don't execute code you don't understand! I'm not malicious, promise, but someone else might be. They might also do something you weren't expecting, even if not malicious!</li>
+                    <li>On that note: this code toggles the setting <code>Application.AutoCorrect.ReplaceText</code> - unlike other settings, this is not specific to your current document! This applies to Word as a whole, even if you shut down Word and restart! The macro produces a popup message after running telling you the current state, hopefully minimising trouble you can cause yourself.</li>
+                    <li>This is a very blunt instrument for telling Word to stop messing with your stuff.</li>
+                    <li>This is intended as a global macro, but feel free to use/modify as you like (this is actively "Unlicense"-ed, using the Unlicense (release at the end of this page)</li>
+                    <li>All settings are toggled at once, being set to the opposite of whatever <code>Application.AutoCorrect.ReplaceText</code> currently is set to (except the <code>NoProofing</code> setting, which is set to a sensible value - if other settings are off, <code>NoProofing</code> is on)</li>
+                </ol>
+            </p>
+
+            To add to word, you'll need to execute a few steps
+            <ol>
+                <li>Enable the Developer tab</li>
+                <li>Set the "Macros in" setting to the global template "Normal.dotm"</li>
+                <li>Add the new Macro by hitting Edit or Create and dropping the code in, then close the VBA editor window</li>
+                <li>The Macro will now be available in the Developer > Macros menu</li>
+            </ol>
+        </div>
+        <div class="row">
+            <div class="d-grid gap-2 justify-content-sm-end" >
+                <button type="button" class="btn btn-primary" onclick="copyMacro();">Copy Code to Clipboard</button>
+            </div>
+                <pre><code id="macroCode">
+Sub ToggleAllSilentCorrectorsAndSquiggles()
+'
+' ToggleAllSilentCorrectorsAndSquiggles Macro
+'
+'
+
+' Toggle is entirely based on the state of this setting. This is a very blunt instrument
+Dim toggleState As Boolean
+toggleState = Not Application.AutoCorrect.ReplaceText
+
+Dim infoMsg As String
+infoMsg = "Toggled Correctors to '" & CStr(toggleState) & "'" & vbNewLine & vbNewLine
+
+'Application level settings, a bit dangerous. A warning is included at the end for these,
+' and should be updated if this chunk is changed
+Application.AutoCorrect.ReplaceText = toggleState
+infoMsg = infoMsg & "Application.AutoCorrect.ReplaceText = " _
+    & CStr(Application.AutoCorrect.ReplaceText) & vbNewLine
+
+'Document level settings. Less dangerous, but still - update info string if you change anything
+With ActiveDocument
+    'Invert for "NoProofing": if toggleState is false (i.e. we're
+    ' disabling auto-correct), then "NoProofing" should be true.
+    .Styles("Normal").NoProofing = Not toggleState
+    .ShowSpellingErrors = toggleState
+    .ShowGrammaticalErrors = toggleState
+End With
+infoMsg = infoMsg & "ActiveDocument.Styles('Normal').NoProofing = "
+'NB NoProofing is a Long for some reason, but contains bool equivs, so extra convert for display
+infoMsg = infoMsg & CStr(CBool(ActiveDocument.Styles("Normal").NoProofing)) & vbNewLine
+infoMsg = infoMsg & "ActiveDocument.ShowSpellingErrors = " _
+    & CStr(ActiveDocument.ShowSpellingErrors) & vbNewLine
+infoMsg = infoMsg & "ActiveDocument.ShowGrammaticalErrors = " _
+    & CStr(ActiveDocument.ShowGrammaticalErrors) & vbNewLine
+
+'Finish up our user message and display
+infoMsg = infoMsg & vbNewLine
+infoMsg = infoMsg & "NOTE CAREFULLY: Application.AutoCorrect.ReplaceText is " _
+    & "not document-specific. If this is off, it will remain off, even in new documents"
+
+MsgBox (infoMsg)
+
+End Sub
+                </code></pre>
+        </div>
+
+        <div class="row">
+            <code><pre>
+The Macro code on this page is free and unencumbered software released
+into the public domain.
+
+Anyone is free to copy, modify, publish, use, compile, sell, or
+distribute this software, either in source code form or as a compiled
+binary, for any purpose, commercial or non-commercial, and by any
+means.
+
+In jurisdictions that recognize copyright laws, the author or authors
+of this software dedicate any and all copyright interest in the
+software to the public domain. We make this dedication for the benefit
+of the public at large and to the detriment of our heirs and
+successors. We intend this dedication to be an overt act of
+relinquishment in perpetuity of all present and future rights to this
+software under copyright law.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+
+For more information, please refer to http://unlicense.org/
+            </code></pre>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
+  </body>
+</html>
